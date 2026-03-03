@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Gradle / Kotlin
+.gradle/
+.kotlin/
+**/.gradle/
+**/build/
+local.properties
+
+# Android
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.ap_
+*.aab
+
+# iOS / Apple toolchain artifacts (for KMP builds)
+DerivedData/
+**/xcuserdata/
+**/*.xcuserstate
+
+# Logs / temp
+*.log
+
+# Node
+node_modules/
