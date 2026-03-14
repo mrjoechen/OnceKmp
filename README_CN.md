@@ -85,6 +85,14 @@ Desktop / iOS 自定义更新时间戳：
 Once.initialise(appUpdatedTimeMillis = 1_700_000_000_000L)
 ```
 
+Desktop 自定义存储目录（可选）：
+
+```kotlin
+Once.initialise(
+    storageDir = java.nio.file.Paths.get("/custom/path/for/oncekmp")
+)
+```
+
 ## 使用示例
 
 ```kotlin
@@ -136,99 +144,23 @@ if (!Once.beenDone(Once.THIS_APP_VERSION, "show_whats_new")) {
 ### Desktop (JVM)
 
 - 调用的原生存储 API：
-  - `java.util.prefs.Preferences.userRoot().node("/oncekmp/<storeName>")`
-  - `get()/put()/remove()/clear()/keys()`
-- 默认节点根：
-  - `/oncekmp`
-- 常见后端存储位置：
-  - macOS：`~/Library/Preferences/com.apple.java.util.prefs.plist`
-  - Linux：`~/.java/.userPrefs/oncekmp/...`
-  - Windows：`HKEY_CURRENT_USER\\Software\\JavaSoft\\Prefs\\oncekmp\\...`
-
-## 本地开发
-
-查看工程模块：
-
-```bash
-./gradlew projects
-```
-
-运行库测试：
-
-```bash
-./gradlew :onceKmp:allTests --stacktrace
-```
-
-如果机器没有 Xcode 工具链，仅跑 JVM/Android：
-
-```bash
-./gradlew :onceKmp:desktopTest :onceKmp:testDebugUnitTest
-```
-
-发布到本地 Maven：
-
-```bash
-./scripts/publish-oncekmp.sh local
-```
-
-## 发布到 Maven Central
-
-项目使用 `com.vanniktech.maven.publish`。
-
-必须环境变量：
-
-```bash
-export ORG_GRADLE_PROJECT_mavenCentralUsername=...
-export ORG_GRADLE_PROJECT_mavenCentralPassword=...
-export ORG_GRADLE_PROJECT_signingInMemoryKey=...
-export ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=...
-```
-
-可选覆盖参数：
-
-```bash
-export ONCEKMP_GROUP=space.joechen
-export ONCEKMP_ARTIFACT_ID=oncekmp
-export ONCEKMP_VERSION=0.1.0
-export ONCEKMP_REPO_URL=https://github.com/<your-org>/<your-repo>
-export ONCEKMP_SCM_CONNECTION=scm:git:git://github.com/<your-org>/<your-repo>.git
-export ONCEKMP_SCM_DEVELOPER_CONNECTION=scm:git:ssh://git@github.com/<your-org>/<your-repo>.git
-export ONCEKMP_SIGN_PUBLICATIONS=true
-```
-
-执行发布：
-
-```bash
-./scripts/publish-oncekmp.sh
-```
-
-## GitHub 开源建议检查项
-
-- [x] Apache-2.0 协议（`LICENSE`）
-- [x] 清晰的公共仓库结构
-- [x] 根目录中英双语 README
-- [x] Maven Central 发布配置
-- [x] 示例模块和测试
-
-建议首发前补充：
-
-- GitHub Topics：`kotlin`、`kotlin-multiplatform`、`kmp`、`android`、`ios`、`desktop`
-- CI：至少跑 `:onceKmp:allTests`
-- 首个 release tag（如 `v0.1.0`）
-
-## klibs.io 收录检查项
-
-按 [klibs.io FAQ](https://klibs.io/faq)，一般满足以下条件后约 24 小时自动收录：
-
-- GitHub 开源可访问
-- 至少一个 Maven Central 制品
-- 至少一个包含 `kotlin-tooling-metadata.json` 的多平台制品
-- POM 中 `url` 或 `scm.url` 指向有效 GitHub 仓库
-
-本仓库配置已满足以上条件。
+  - `java.nio.file` + `java.util.Properties`
+  - 每个 store 写入为 `<storeName>.properties` 文件
+- 默认 rootNode（自动感知）：
+  - 优先级：`oncekmp.desktop.appId` 系统属性
+  - 然后：`app.id` / `application.id` / `app.identifier` / `bundle.id` / `app.name`
+  - 然后：运行时标识（`jpackage.app-path` / `sun.java.command` / `java.class.path`）
+  - 最终回退：`oncekmp-app-<当前工作目录名>`
+- 默认存储目录：
+  - macOS：`~/Library/Application Support/<rootNode>/oncekmp/`
+  - Linux：`${XDG_CONFIG_HOME:-~/.config}/<rootNode>/oncekmp/`
+  - Windows：`%APPDATA%\\<rootNode>\\oncekmp\\`
+- 说明：
+  - 不同应用通过不同 `<rootNode>` 隔离
+  - Desktop 端是否在卸载时自动清理用户配置目录，取决于具体安装器与卸载脚本，不能一概保证
+  - 删除对应应用数据目录一定可以清空 `oncekmp` 状态
 
 ## 参考
 
 - [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
 - [jonfinerty/Once](https://github.com/jonfinerty/Once)
-- [klibs.io FAQ](https://klibs.io/faq)

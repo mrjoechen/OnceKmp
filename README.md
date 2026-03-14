@@ -85,6 +85,14 @@ Desktop/iOS custom app update timestamp:
 Once.initialise(appUpdatedTimeMillis = 1_700_000_000_000L)
 ```
 
+Desktop custom storage directory (optional):
+
+```kotlin
+Once.initialise(
+    storageDir = java.nio.file.Paths.get("/custom/path/for/oncekmp")
+)
+```
+
 ## Usage Example
 
 ```kotlin
@@ -116,8 +124,8 @@ if (!Once.beenDone(Once.THIS_APP_VERSION, "show_whats_new")) {
 - App version timestamp API:
   - `PackageManager.getPackageInfo(...).lastUpdateTime`
 - Default storage files:
-  - `/data/user/0/<applicationId>/shared_prefs/PersistedMapTagLastSeenMap.xml`
-  - `/data/user/0/<applicationId>/shared_prefs/PersistedSetToDoSet.xml`
+  - `/data/data/<applicationId>/shared_prefs/PersistedMapTagLastSeenMap.xml`
+  - `/data/data/<applicationId>/shared_prefs/PersistedSetToDoSet.xml`
 - Auto init context capture:
   - `OnceContextProvider` is declared in library manifest and caches `applicationContext`.
 
@@ -136,99 +144,23 @@ if (!Once.beenDone(Once.THIS_APP_VERSION, "show_whats_new")) {
 ### Desktop (JVM)
 
 - Storage API:
-  - `java.util.prefs.Preferences.userRoot().node("/oncekmp/<storeName>")`
-  - `get()/put()/remove()/clear()/keys()`
-- Default node root:
-  - `/oncekmp`
-- Typical backend locations:
-  - macOS: `~/Library/Preferences/com.apple.java.util.prefs.plist`
-  - Linux: `~/.java/.userPrefs/oncekmp/...`
-  - Windows: `HKEY_CURRENT_USER\Software\JavaSoft\Prefs\oncekmp\...`
-
-## Local Development
-
-Build projects:
-
-```bash
-./gradlew projects
-```
-
-Run library tests:
-
-```bash
-./gradlew :onceKmp:allTests --stacktrace
-```
-
-If your machine has no Xcode toolchain, run JVM/Android tests only:
-
-```bash
-./gradlew :onceKmp:desktopTest :onceKmp:testDebugUnitTest
-```
-
-Publish to local Maven:
-
-```bash
-./scripts/publish-oncekmp.sh local
-```
-
-## Publish To Maven Central
-
-This project uses `com.vanniktech.maven.publish`.
-
-Required env vars:
-
-```bash
-export ORG_GRADLE_PROJECT_mavenCentralUsername=...
-export ORG_GRADLE_PROJECT_mavenCentralPassword=...
-export ORG_GRADLE_PROJECT_signingInMemoryKey=...
-export ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=...
-```
-
-Optional publication overrides:
-
-```bash
-export ONCEKMP_GROUP=space.joechen
-export ONCEKMP_ARTIFACT_ID=oncekmp
-export ONCEKMP_VERSION=0.1.0
-export ONCEKMP_REPO_URL=https://github.com/<your-org>/<your-repo>
-export ONCEKMP_SCM_CONNECTION=scm:git:git://github.com/<your-org>/<your-repo>.git
-export ONCEKMP_SCM_DEVELOPER_CONNECTION=scm:git:ssh://git@github.com/<your-org>/<your-repo>.git
-export ONCEKMP_SIGN_PUBLICATIONS=true
-```
-
-Publish:
-
-```bash
-./scripts/publish-oncekmp.sh
-```
-
-## GitHub Open Source Checklist
-
-- [x] Apache-2.0 license (`LICENSE`)
-- [x] Public source repository structure
-- [x] English/Chinese root README
-- [x] Maven Central publication config
-- [x] Sample module and tests
-
-Recommended before first public release:
-
-- Add GitHub Topics: `kotlin`, `kotlin-multiplatform`, `kmp`, `android`, `ios`, `desktop`.
-- Add CI workflow for `:onceKmp:allTests`.
-- Create first release tag (for example `v0.1.0`).
-
-## klibs.io Inclusion Checklist
-
-According to [klibs.io FAQ](https://klibs.io/faq), the project is indexed automatically (usually within ~24h) when:
-
-- Source is public on GitHub.
-- At least one artifact is published to Maven Central.
-- At least one artifact is multiplatform and contains `kotlin-tooling-metadata.json`.
-- At least one artifact POM has valid GitHub URL in `url` or `scm.url`.
-
-This repository is configured to satisfy the above conditions.
+  - `java.nio.file` + `java.util.Properties`
+  - each store is written as `<storeName>.properties` file
+- Default root node (auto-detected):
+  - priority: `oncekmp.desktop.appId` system property
+  - then: `app.id` / `application.id` / `app.identifier` / `bundle.id` / `app.name`
+  - then: runtime identity (`jpackage.app-path` / `sun.java.command` / `java.class.path`)
+  - final fallback: `oncekmp-app-<working-directory-name>`
+- Default storage directory:
+  - macOS: `~/Library/Application Support/<rootNode>/oncekmp/`
+  - Linux: `${XDG_CONFIG_HOME:-~/.config}/<rootNode>/oncekmp/`
+  - Windows: `%APPDATA%\\<rootNode>\\oncekmp\\`
+- Notes:
+  - different apps are isolated by different `<rootNode>`
+  - uninstalling an app does not always guarantee removal of user config data on all desktop installers
+  - deleting the app-specific data directory always clears `oncekmp` state
 
 ## References
 
 - [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
 - [jonfinerty/Once](https://github.com/jonfinerty/Once)
-- [klibs.io FAQ](https://klibs.io/faq)
