@@ -10,7 +10,8 @@ Create a GitHub Environment named `maven-central`, then add these secrets:
 - `MAVEN_CENTRAL_PASSWORD`
 - `SIGNING_IN_MEMORY_KEY`
 - `SIGNING_IN_MEMORY_KEY_PASSWORD`
-- `SIGNING_IN_MEMORY_KEY_ID` (optional)
+
+`SIGNING_IN_MEMORY_KEY_ID` is intentionally not used by this repository's workflow. Gradle signing works with the in-memory key and password alone, which avoids key ID parsing issues on newer Gradle versions.
 
 For the repository owner, the default POM metadata already points to:
 
