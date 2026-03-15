@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <provider
-            android:name="space.joechen.OnceContextProvider"
+            android:name="io.github.mrjoechen.OnceContextProvider"
             android:authorities="${applicationId}.oncekmp-init"
             android:exported="false" />
     </application>

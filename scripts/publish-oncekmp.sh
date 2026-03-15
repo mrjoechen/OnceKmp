@@ -6,12 +6,12 @@ cd "$ROOT_DIR"
 
 MODE="${1:-central}"
 
-GROUP="${ONCEKMP_GROUP:-space.joechen}"
+GROUP="${ONCEKMP_GROUP:-io.github.mrjoechen}"
 ARTIFACT_ID="${ONCEKMP_ARTIFACT_ID:-oncekmp}"
 VERSION="${ONCEKMP_VERSION:-0.1.0}"
-REPO_URL="${ONCEKMP_REPO_URL:-https://github.com/joechen/OnceKmp}"
-SCM_CONNECTION="${ONCEKMP_SCM_CONNECTION:-scm:git:git://github.com/joechen/OnceKmp.git}"
-SCM_DEVELOPER_CONNECTION="${ONCEKMP_SCM_DEVELOPER_CONNECTION:-scm:git:ssh://git@github.com/joechen/OnceKmp.git}"
+REPO_URL="${ONCEKMP_REPO_URL:-https://github.com/mrjoechen/OnceKmp}"
+SCM_CONNECTION="${ONCEKMP_SCM_CONNECTION:-scm:git:git://github.com/mrjoechen/OnceKmp.git}"
+SCM_DEVELOPER_CONNECTION="${ONCEKMP_SCM_DEVELOPER_CONNECTION:-scm:git:ssh://git@github.com/mrjoechen/OnceKmp.git}"
 
 COMMON_ARGS=(
   "-PONCEKMP_GROUP=${GROUP}"
@@ -32,4 +32,8 @@ fi
 : "${ORG_GRADLE_PROJECT_signingInMemoryKey:?Missing signingInMemoryKey}"
 : "${ORG_GRADLE_PROJECT_signingInMemoryKeyPassword:?Missing signingInMemoryKeyPassword}"
 
-./gradlew :onceKmp:publishAndReleaseToMavenCentral "${COMMON_ARGS[@]}" "-PONCEKMP_SIGN_PUBLICATIONS=true"
+./gradlew \
+  --no-configuration-cache \
+  :onceKmp:publishAndReleaseToMavenCentral \
+  "${COMMON_ARGS[@]}" \
+  "-PONCEKMP_SIGN_PUBLICATIONS=true"

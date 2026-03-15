@@ -8,8 +8,8 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidLibrary {
-        namespace = "space.joechen.oncekmpsample"
+    android {
+        namespace = "io.github.mrjoechen.oncekmpsample"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         withHostTestBuilder {}

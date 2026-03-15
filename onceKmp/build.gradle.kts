@@ -9,8 +9,8 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidLibrary {
-        namespace = "space.joechen"
+    android {
+        namespace = "io.github.mrjoechen"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         withHostTestBuilder {}
@@ -38,14 +38,14 @@ kotlin {
     }
 }
 
-val publishGroupId = providers.gradleProperty("ONCEKMP_GROUP").orElse("space.joechen")
+val publishGroupId = providers.gradleProperty("ONCEKMP_GROUP").orElse("io.github.mrjoechen")
 val publishArtifactId = providers.gradleProperty("ONCEKMP_ARTIFACT_ID").orElse("oncekmp")
 val publishVersion = providers.gradleProperty("ONCEKMP_VERSION").orElse("0.1.0")
-val publishRepoUrl = providers.gradleProperty("ONCEKMP_REPO_URL").orElse("https://github.com/joechen/OnceKmp")
+val publishRepoUrl = providers.gradleProperty("ONCEKMP_REPO_URL").orElse("https://github.com/mrjoechen/OnceKmp")
 val publishScmConnection = providers.gradleProperty("ONCEKMP_SCM_CONNECTION")
-    .orElse("scm:git:git://github.com/joechen/OnceKmp.git")
+    .orElse("scm:git:git://github.com/mrjoechen/OnceKmp.git")
 val publishScmDeveloperConnection = providers.gradleProperty("ONCEKMP_SCM_DEVELOPER_CONNECTION")
-    .orElse("scm:git:ssh://git@github.com/joechen/OnceKmp.git")
+    .orElse("scm:git:ssh://git@github.com/mrjoechen/OnceKmp.git")
 val shouldSignPublications = providers.gradleProperty("ONCEKMP_SIGN_PUBLICATIONS").orElse("true")
 
 mavenPublishing {
@@ -75,7 +75,7 @@ mavenPublishing {
 
         developers {
             developer {
-                id.set("joechen")
+                id.set("mrjoechen")
                 name.set("Joe Chen")
                 email.set("mrjctech@gmail.com")
             }

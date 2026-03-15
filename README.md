@@ -30,10 +30,10 @@
 
 ## Coordinates
 
-- Group: `space.joechen`
+- Group: `io.github.mrjoechen`
 - Artifact: `oncekmp`
-- Kotlin package: `space.joechen`
-- Android namespace: `space.joechen`
+- Kotlin package: `io.github.mrjoechen`
+- Android namespace: `io.github.mrjoechen`
 
 ## Install
 
@@ -43,7 +43,7 @@
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("space.joechen:oncekmp:<latest-version>")
+            implementation("io.github.mrjoechen:oncekmp:<latest-version>")
         }
     }
 }

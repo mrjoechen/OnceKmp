@@ -30,10 +30,10 @@
 
 ## 坐标信息
 
-- Group：`space.joechen`
+- Group：`io.github.mrjoechen`
 - Artifact：`oncekmp`
-- Kotlin package：`space.joechen`
-- Android namespace：`space.joechen`
+- Kotlin package：`io.github.mrjoechen`
+- Android namespace：`io.github.mrjoechen`
 
 ## 接入方式
 
@@ -43,7 +43,7 @@
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("space.joechen:oncekmp:<latest-version>")
+            implementation("io.github.mrjoechen:oncekmp:<latest-version>")
         }
     }
 }
