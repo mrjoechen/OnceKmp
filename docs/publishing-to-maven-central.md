@@ -4,7 +4,7 @@ This repository includes a GitHub Actions workflow at `.github/workflows/publish
 
 ## Recommended Setup
 
-Create a GitHub Environment named `maven-central`, then add these secrets:
+Create a GitHub Environment named `maven`, then add these secrets:
 
 - `MAVEN_CENTRAL_USERNAME`
 - `MAVEN_CENTRAL_PASSWORD`
