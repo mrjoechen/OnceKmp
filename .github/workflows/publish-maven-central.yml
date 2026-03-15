@@ -20,7 +20,7 @@ jobs:
     name: Publish
     runs-on: macos-latest
     timeout-minutes: 90
-    environment: maven-central
+    environment: maven
     permissions:
       contents: write
     env:
