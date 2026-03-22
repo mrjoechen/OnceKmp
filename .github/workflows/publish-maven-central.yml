@@ -47,6 +47,7 @@ jobs:
       - name: Resolve release version
         id: version
         env:
+          EVENT_NAME: ${{ github.event_name }}
           INPUT_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '' }}
           REF_NAME: ${{ github.ref_name }}
         run: |
@@ -65,8 +66,16 @@ jobs:
             exit 1
           fi
 
+          if [[ "${EVENT_NAME}" == "push" ]]; then
+            release_tag="${REF_NAME}"
+          else
+            release_tag="v${version}"
+          fi
+
           echo "value=${version}" >> "${GITHUB_OUTPUT}"
+          echo "tag=${release_tag}" >> "${GITHUB_OUTPUT}"
           echo "Publishing version ${version}"
+          echo "GitHub release tag ${release_tag}"
 
       - name: Run release checks
         run: >
@@ -86,10 +95,9 @@ jobs:
         run: ./scripts/publish-oncekmp.sh central
 
       - name: Create GitHub Release
-        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG_NAME: ${{ github.ref_name }}
+          TAG_NAME: ${{ steps.version.outputs.tag }}
           VERSION: ${{ steps.version.outputs.value }}
         run: |
           set -euo pipefail
@@ -102,4 +110,5 @@ jobs:
           gh release create "${TAG_NAME}" \
             --repo "${GITHUB_REPOSITORY}" \
             --title "${TAG_NAME}" \
+            --target "${GITHUB_SHA}" \
             --notes "Maven Central release ${VERSION}"

@@ -37,7 +37,9 @@ The workflow will:
 2. Run `:onceKmp:allTests`
 3. Compile the sample module
 4. Publish and release `onceKmp` to Maven Central
-5. Create a GitHub Release for the tag on successful publish
+5. Create a GitHub Release on successful publish
+
+For `workflow_dispatch`, the workflow creates the release with tag `v<version>` (for example `v0.1.0`) after Maven Central publish succeeds.
 
 ## Recommended Versioning
 
